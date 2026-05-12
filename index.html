@@ -28,19 +28,12 @@
 
     callStarted = true;
 
-    // Start assistant AFTER permission
-    await vapi.start(
-      "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
-    );
-
-    console.log("Call started");
-
-    // Small delay helps mobile audio initialize
-    setTimeout(() => {
-      vapi.say(
-        "Hello, welcome to Tasca do Miradouro. How can I help you today?"
+    // Small delay helps mobile initialize audio
+    setTimeout(async () => {
+      await vapi.start(
+        "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
       );
-    }, 1000);
+    }, 500);
 
   } catch (e) {
     console.error(e);
