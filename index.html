@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tasca Voicebot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/index.min.js"></script>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding-top:100px">
+
+  <h1>Tasca do Miradouro Voice Assistant</h1>
+
+  <button id="startBtn" style="padding:15px 30px;font-size:18px">
+    Start Voice Call
+  </button>
+
+  <script>
+    const vapi = new Vapi("d0aaa84a-d46f-49a4-b534-5f541916a571");
+
+    document
+      .getElementById("startBtn")
+      .addEventListener("click", async () => {
+        await vapi.start("138bbe8c-57ea-484e-9c01-bcd4e7419b11");
+      });
+
+    vapi.on("call-start", () => {
+      console.log("Call started");
+    });
+
+    vapi.on("call-end", () => {
+      console.log("Call ended");
+    });
+
+    vapi.on("error", (e) => {
+      console.error(e);
+      alert("Voice session error");
+    });
+  </script>
+
+</body>
+</html>
