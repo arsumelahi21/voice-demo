@@ -15,19 +15,38 @@
       "d0aaa84a-d46f-49a4-b534-5f541916a571"
     );
 
+    let callStarted = false;
+
     window.startCall = async () => {
+      if (callStarted) return;
+
       try {
+        // Explicit mobile mic permission
+        await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+
+        callStarted = true;
+
         await vapi.start(
           "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
         );
       } catch (e) {
         console.error(e);
+
+        alert(
+          "Unable to start voice call. Please allow microphone access."
+        );
+
+        callStarted = false;
       }
     };
 
     window.endCall = async () => {
       try {
         await vapi.stop();
+
+        callStarted = false;
       } catch (e) {
         console.error(e);
       }
@@ -39,11 +58,16 @@
 
     vapi.on("call-end", () => {
       console.log("Call ended");
+
+      callStarted = false;
     });
 
     vapi.on("error", (e) => {
       console.error(e);
+
       alert("Voice session error");
+
+      callStarted = false;
     });
   </script>
 </head>
@@ -53,11 +77,18 @@
     font-family: sans-serif;
     text-align: center;
     padding-top: 100px;
+    background: #111827;
+    color: white;
   "
 >
   <h1>
     Tasca do Miradouro Voice Assistant
   </h1>
+
+  <p>
+    Speak with our AI restaurant assistant for reservations,
+    menu recommendations, and restaurant information.
+  </p>
 
   <button
     onclick="startCall()"
@@ -66,6 +97,10 @@
       font-size: 18px;
       cursor: pointer;
       margin-right: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #10b981;
+      color: white;
     "
   >
     Start Voice Call
@@ -77,9 +112,10 @@
       padding: 15px 30px;
       font-size: 18px;
       cursor: pointer;
-      background: red;
+      background: #ef4444;
       color: white;
       border: none;
+      border-radius: 8px;
     "
   >
     End Call
