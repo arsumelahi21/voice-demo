@@ -11,28 +11,40 @@
   <script type="module">
     import Vapi from "https://esm.sh/@vapi-ai/web";
 
+    const vapi = new Vapi(
+      "d0aaa84a-d46f-49a4-b534-5f541916a571"
+    );
+
     window.startCall = async () => {
-      const vapi = new Vapi(
-        "d0aaa84a-d46f-49a4-b534-5f541916a571"
-      );
-
-      vapi.on("call-start", () => {
-        console.log("Call started");
-      });
-
-      vapi.on("call-end", () => {
-        console.log("Call ended");
-      });
-
-      vapi.on("error", (e) => {
+      try {
+        await vapi.start(
+          "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
+        );
+      } catch (e) {
         console.error(e);
-        alert("Voice session error");
-      });
-
-      await vapi.start(
-        "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
-      );
+      }
     };
+
+    window.endCall = async () => {
+      try {
+        await vapi.stop();
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    vapi.on("call-start", () => {
+      console.log("Call started");
+    });
+
+    vapi.on("call-end", () => {
+      console.log("Call ended");
+    });
+
+    vapi.on("error", (e) => {
+      console.error(e);
+      alert("Voice session error");
+    });
   </script>
 </head>
 
@@ -53,9 +65,24 @@
       padding: 15px 30px;
       font-size: 18px;
       cursor: pointer;
+      margin-right: 10px;
     "
   >
     Start Voice Call
+  </button>
+
+  <button
+    onclick="endCall()"
+    style="
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      background: red;
+      color: white;
+      border: none;
+    "
+  >
+    End Call
   </button>
 </body>
 </html>
