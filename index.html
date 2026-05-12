@@ -17,31 +17,41 @@
 
     let callStarted = false;
 
-    window.startCall = async () => {
-      if (callStarted) return;
+  window.startCall = async () => {
+  if (callStarted) return;
 
-      try {
-        // Explicit mobile mic permission
-        await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
+  try {
+    // Ask mic permission FIRST
+    await navigator.mediaDevices.getUserMedia({
+      audio: true,
+    });
 
-        callStarted = true;
+    callStarted = true;
 
-        await vapi.start(
-          "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
-        );
-      } catch (e) {
-        console.error(e);
+    // Start assistant AFTER permission
+    await vapi.start(
+      "138bbe8c-57ea-484e-9c01-bcd4e7419b11"
+    );
 
-        alert(
-          "Unable to start voice call. Please allow microphone access."
-        );
+    console.log("Call started");
 
-        callStarted = false;
-      }
-    };
+    // Small delay helps mobile audio initialize
+    setTimeout(() => {
+      vapi.say(
+        "Hello, welcome to Tasca do Miradouro. How can I help you today?"
+      );
+    }, 1000);
 
+  } catch (e) {
+    console.error(e);
+
+    alert(
+      "Unable to start voice call. Please allow microphone access."
+    );
+
+    callStarted = false;
+  }
+};
     window.endCall = async () => {
       try {
         await vapi.stop();
